@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>추가비용 결제 - 결제 설정 화면 정의서</title>
+<style>
+:root{--line:#d7d7d7;--muted:#687385;--blue:#227aff;--navy:#0f172a;--bg:#f4f6f8;--red:#e0432b;font-family:Pretendard,"Malgun Gothic",Arial,sans-serif}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:#222;font:13px/1.5 var(--font)}.wrap{width:100%;padding:16px 20px 40px}.doc-title{display:flex;align-items:center;gap:10px;margin-bottom:12px}.doc-title h1{margin:0;font-size:19px}.project-tag{color:#666;font-weight:400}.badge{padding:2px 8px;border:1px solid var(--blue);border-radius:3px;color:var(--blue);font-size:11px;font-weight:700}.doc-meta,.qa-panel table{width:100%;border-collapse:collapse;background:#fff}.doc-meta{margin-bottom:16px;table-layout:fixed}.doc-meta th,.doc-meta td,.qa-panel th,.qa-panel td{border:1px solid var(--line);padding:8px 10px;font-size:12px;text-align:left}.doc-meta th,.qa-panel th{width:110px;background:#fafafa;color:#555}.doc-body{display:flex;gap:16px;align-items:stretch}.screen-panel{flex:1 1 auto;min-width:0;padding:18px;border:1px solid var(--line);background:#fff}.panel-label{margin:0 0 10px;color:#888;font-size:11px}.screen-inner{max-width:1200px;margin:0 auto}.state{position:relative;margin-bottom:22px;border:1px solid #b9b9b9;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.04)}.state:last-child{margin-bottom:0}.state-head{height:36px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#f7f8fa;border-bottom:1px solid #dfe3e8;font-weight:700}.state-head small{color:#7b8490;font-weight:400}.admin-shell{display:grid;grid-template-columns:154px 1fr;min-height:292px}.side{padding:12px 10px;background:#172235;color:#dbe5f4}.side .brand{margin-bottom:18px;color:#fff;font-size:14px;font-weight:700}.side div{padding:7px 8px;border-radius:3px;color:#aebbd0;font-size:11px}.side .active{background:#294b7c;color:#fff}.main{background:#fff}.crumb{padding:12px 16px 9px;border-bottom:1px solid #edf0f3;color:#738096;font-size:11px}.content{padding:17px 20px}.content h3{margin:0 0 10px;font-size:16px}.notice{margin-bottom:14px;padding:9px 11px;border:1px solid #d8e7ff;background:#f5f9ff;color:#385d8f;font-size:11px}.settings{position:relative;border:1px solid #cfd4dc}.settings-title{padding:10px 12px;border-bottom:1px solid #d7d7d7;font-weight:700;color:#222}.setting-row{display:grid;grid-template-columns:112px 1fr;min-height:42px}.setting-label{display:flex;align-items:center;padding:8px 10px;background:#f0f0f0;border-right:1px solid #d7d7d7;border-bottom:1px solid #d7d7d7;font-size:11px}.setting-value{display:flex;align-items:center;gap:18px;padding:5px 12px;border-bottom:1px solid #d7d7d7;position:relative}.setting-row:last-child .setting-label,.setting-row:last-child .setting-value{border-bottom:0}.check{display:inline-flex;align-items:center;gap:7px;color:var(--navy);white-space:nowrap;font-size:12px}.box{width:17px;height:17px;border:1px solid #d2daed;border-radius:4px;background:#fff;display:inline-grid;place-items:center;font-size:12px}.box.checked{background:var(--blue);border-color:var(--blue);color:#fff}.box.disabled{background:#f6f7f9;color:#b5c4d9}.check.disabled{color:#b5c4d9}.select{display:flex;align-items:center;justify-content:space-between;width:210px;height:22px;padding:0 7px;border:1px solid #d7d7d7;border-radius:2px;background:#fff;font-size:11px}.select .arrow{color:#687385}.dropdown{position:absolute;z-index:4;left:124px;top:30px;width:210px;border:1px solid #d7d7d7;background:#fff;box-shadow:0 4px 10px rgba(0,0,0,.12)}.option{height:24px;padding:4px 10px;font-size:11px}.option.selected{background:rgba(34,122,255,.69);color:#fff}.pin-anchor{position:relative}.pin{position:absolute;top:-10px;left:-10px;z-index:5;display:grid;place-items:center;width:23px;height:23px;border:2px solid #fff;border-radius:50%;background:var(--red);box-shadow:0 1px 4px rgba(0,0,0,.35);color:#fff;font-size:11px;font-weight:700}.description{margin-top:14px;padding:11px;border:1px solid #e0e4ea;background:#fbfcfe}.description strong{display:block;margin-bottom:4px;font-size:12px}.description ul{margin:3px 0 0;padding-left:17px}.description li{margin:2px 0;font-size:11px;line-height:1.45}.desc-panel{flex:0 0 460px;align-self:flex-start;padding:16px 18px;border:1px solid var(--line);background:#fff;position:sticky;top:16px}.desc-panel h2,.qa-panel h2{margin:0 0 10px;padding-bottom:8px;border-bottom:2px solid #333;font-size:14px}.desc-list{margin:0;padding:0;list-style:none}.desc-list>li{display:block;padding:9px 0;border-bottom:1px dashed var(--line)}.desc-list>li:last-child{border-bottom:0}.num{display:inline-grid;place-items:center;width:17px;height:17px;margin-bottom:4px;border-radius:50%;background:var(--red);color:#fff;font-size:10px;font-weight:700}.desc-body strong,.sub-body strong{display:block;margin-bottom:4px;font-size:13px}.desc-body ul.bullet,.sub-body ul.bullet{margin:3px 0 0;padding:0;list-style:none}.desc-body ul.bullet li,.sub-body ul.bullet li{position:relative;padding-left:13px;font-size:12px}.desc-body ul.bullet li:before,.sub-body ul.bullet li:before{content:"•";position:absolute;left:0}.field-list{margin:4px 0 0;padding-left:18px}.field-list li{margin-bottom:4px;font-size:12px;line-height:1.45}.field-list b{display:block;margin-bottom:1px}.cond-label{display:block;margin-top:5px;font-weight:700;color:#c0392b}.cond-list{margin:2px 0 0;padding-left:18px;color:#c0392b}.cond-list li{font-size:12px}.sub-list{margin:7px 0 0;padding:7px 0 0;border-top:1px dotted var(--line);list-style:none}.sub-list li{padding-bottom:7px}.sub-num{display:inline-block;margin-bottom:3px;padding:1px 6px;border-radius:10px;background:#eee;color:#555;font-size:10px;font-weight:700}.sub-body p{margin:3px 0;color:#666;font-size:11.5px}.xref{color:#555}.ref{display:inline-block;margin-top:5px;padding:1px 6px;border:1px solid #cfd5dd;border-radius:2px;background:#f7f9fc;color:#3d4b5c;font-size:10.5px}.qa-panel{margin-top:16px;padding:14px 16px;border:1px solid var(--line);background:#fff}.qa-panel th{width:120px}.source-note{margin:10px 0 0;color:#748094;font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="doc-title"><h1><span class="project-tag">추가비용 결제</span> - 결제 설정 화면 정의서</h1><span class="badge">화면정의서 v1.0</span></div>
+  <table class="doc-meta">
+    <tr><th>화면 ID</th><td>SCR-ADDCOST-SET-001</td><th>화면명</th><td>추가비용 결제 설정</td></tr>
+    <tr><th>연결 경로</th><td colspan="3">설정 &gt; 결제 설정 &gt; 결제 기본 설정</td></tr>
+    <tr><th>관련 정책</th><td>20261001 추가비용 1차 진행용 정책서</td><th>관련 Figma</th><td>추가비용 결제_26.09.18 / 2718:4791</td></tr>
+    <tr><th>작성일 / 버전</th><td>2026-10-01 / v1.0</td><th>상태</th><td>기획 검토용 초안</td></tr>
+  </table>
+
+  <div class="doc-body">
+    <div class="screen-panel">
+      <p class="panel-label">화면 미리보기 · Figma 2개 기획서 통합 · 좌측 핀과 우측 설명 번호 1:1 대응</p>
+      <div class="screen-inner">
+        <section class="state">
+          <div class="state-head"><span>상태 A · 기본 설정 화면</span><small>추가비용 결제 설정 추가 - 1</small></div>
+          <div class="admin-shell">
+            <nav class="side"><div class="brand">쇼핑몰 관리자</div><div>대시보드</div><div>주문 관리</div><div>클레임 관리</div><div class="active">설정</div><div>회원 관리</div></nav>
+            <main class="main"><div class="crumb">설정 &gt; 결제 설정 &gt; 결제 기본 설정</div><div class="content"><h3>결제 기본 설정</h3><div class="notice">추가비용 결제에 사용할 항목과 결제 수단을 설정합니다.</div>
+              <div class="settings">
+                <div class="settings-title pin-anchor"><span class="pin">1</span>추가비용 결제 설정</div>
+                <div class="setting-row pin-anchor"><span class="pin">2</span><div class="setting-label">결제 항목</div><div class="setting-value"><span class="check"><span class="box"></span>반품배송비</span><span class="check"><span class="box"></span>교환배송비</span><span class="check"><span class="box"></span>조건미달배송비</span></div></div>
+                <div class="setting-row pin-anchor"><span class="pin">3</span><div class="setting-label">결제 수단</div><div class="setting-value"><span class="check disabled"><span class="box disabled">✓</span>무통장입금</span><span class="check"><span class="box"></span>카드결제</span><span class="check"><span class="box"></span>환불금차감</span></div></div>
+                <div class="setting-row pin-anchor"><span class="pin">4</span><div class="setting-label">기본 결제 수단 설정</div><div class="setting-value"><div class="select">무통장입금 <span class="arrow">⌄</span></div></div></div>
+              </div>
+            </div></main>
+          </div>
+        </section>
+
+        <section class="state">
+          <div class="state-head"><span>상태 B · 기본 결제 수단 선택</span><small>추가비용 결제 설정 추가 - 2</small></div>
+          <div class="admin-shell">
+            <nav class="side"><div class="brand">쇼핑몰 관리자</div><div>대시보드</div><div>주문 관리</div><div>클레임 관리</div><div class="active">설정</div><div>회원 관리</div></nav>
+            <main class="main"><div class="crumb">설정 &gt; 결제 설정 &gt; 결제 기본 설정</div><div class="content"><h3>결제 기본 설정</h3><div class="settings">
+              <div class="settings-title">추가비용 결제 설정</div>
+              <div class="setting-row"><div class="setting-label">결제 항목</div><div class="setting-value"><span class="check"><span class="box checked">✓</span>반품배송비</span><span class="check"><span class="box checked">✓</span>교환배송비</span><span class="check"><span class="box"></span>조건미달배송비</span></div></div>
+              <div class="setting-row"><div class="setting-label">결제 수단</div><div class="setting-value"><span class="check disabled"><span class="box disabled">✓</span>무통장입금</span><span class="check"><span class="box checked">✓</span>카드결제</span><span class="check"><span class="box"></span>환불금차감</span></div></div>
+              <div class="setting-row pin-anchor"><span class="pin">5</span><div class="setting-label">기본 결제 수단 설정</div><div class="setting-value"><div class="select">카드결제 <span class="arrow">⌃</span></div><div class="dropdown"><div class="option">무통장입금</div><div class="option selected">카드결제</div><div class="option">환불금차감</div></div></div></div>
+            </div></div></main>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <aside class="desc-panel">
+      <h2>화면 설명</h2>
+      <ol class="desc-list">
+        <li><span class="num">1</span><div class="desc-body"><strong>추가비용 결제 설정 영역</strong><ul class="bullet"><li>설정 항목 : 결제 항목 / 결제 수단 / 기본 결제 수단 설정</li></ul><ol class="field-list"><li><b>노출 위치</b>설정 &gt; 결제 설정 &gt; 결제 기본 설정 내 설정 블록으로 노출</li><li><b>표시 명칭</b>기존 기타비용 표기는 사용하지 않고 추가비용으로 통일</li></ol><span class="ref">POL-ADDCOST-001</span></div></li>
+        <li><span class="num">2</span><div class="desc-body"><strong>결제 항목</strong><ul class="bullet"><li>선택 항목 : 반품배송비 / 교환배송비 / 조건미달배송비</li></ul><ol class="field-list"><li><b>체크박스</b>항목별 결제 지원 여부를 선택</li><li><b>선택 없음</b>추가비용 결제 미지원 상태로 저장</li><li><b>선택 있음</b>체크한 비용 유형의 클레임 처리 시 결제 수단 사용</li></ol><span class="cond-label">저장 조건 :</span><ol class="cond-list"><li>결제 항목이 1개 이상 선택되어야 결제 수단 설정을 사용할 수 있음</li></ol></div></li>
+        <li><span class="num">3</span><div class="desc-body"><strong>결제 수단</strong><ul class="bullet"><li>제공 수단 : 무통장입금 / 카드결제 / 환불금차감</li></ul><ol class="field-list"><li><b>무통장입금</b>기본 제공 수단이며 선택 해제 불가</li><li><b>카드결제</b>PG가 설정된 상점에서 선택 가능</li><li><b>환불금차감</b>환불금 차감 방식 사용 시 선택 가능</li></ol><span class="cond-label">노출·활성 조건 :</span><ol class="cond-list"><li>상점 PG 미설정 시 카드결제 체크박스 비활성화</li><li>사용 가능한 결제 수단만 기본 결제 수단 후보로 노출</li></ol><span class="ref">POL-ADDCOST-002</span></div></li>
+        <li><span class="num">4</span><div class="desc-body"><strong>기본 결제 수단 설정</strong><ul class="bullet"><li>선택값 : 활성화된 결제 수단 중 1개</li></ul><ol class="field-list"><li><b>기본값</b>무통장입금</li><li><b>변경</b>드롭다운에서 카드결제 또는 환불금차감 선택</li><li><b>저장</b>선택한 기본 수단을 이후 추가비용 결제 화면에 우선 적용</li></ol><span class="xref">[5번 선택 상태에서 상세 동작 확인]</span></div></li>
+        <li><span class="num">5</span><div class="desc-body"><strong>기본 결제 수단 드롭다운</strong><ul class="bullet"><li>동작 : 클릭 시 사용 가능한 수단 목록을 펼침</li></ul><ol class="field-list"><li><b>목록</b>무통장입금 / 카드결제 / 환불금차감</li><li><b>선택 상태</b>현재 선택값은 파란 배경으로 강조</li></ol><span class="cond-label">차단 조건 :</span><ol class="cond-list"><li>결제 수단 설정에서 비활성화된 수단은 목록에서 제외</li><li>PG 미설정 카드결제는 목록에 노출하지 않음</li></ol><ul class="sub-list"><li><span class="sub-num">5-1</span><div class="sub-body"><strong>선택 후 저장</strong><ul class="bullet"><li>사용법 : 결제 수단을 선택한 뒤 설정 저장 버튼을 클릭</li></ul><p>저장 완료 후 선택값을 유지하고, 결제 항목과 수단의 유효성을 다시 검증합니다.</p></div></li></ul></div></li>
+      </ol>
+      <p class="source-note">Figma 원본 2개 화면의 설정 영역·드롭다운 상태를 통합해 작성했습니다. 화면 캡처 자체가 아닌 편집 가능한 HTML 마크업으로 재구성했습니다.</p>
+    </aside>
+  </div>
+  <div class="qa-panel"><h2>확인 필요 사항</h2><table><tr><th>O-01</th><td>카드결제와 환불금차감의 상점별 활성화 조건 및 저장 API 검증 방식 확정 필요</td></tr><tr><th>O-02</th><td>결제 항목을 모두 해제한 상태에서 저장 허용 여부와 관리자 안내 문구 확정 필요</td></tr><tr><th>QA</th><td>결제수단 비활성화, 기본값 후보 제외, 드롭다운 선택 후 저장 유지 여부를 상태별로 확인</td></tr></table></div>
+</div>
+</body>
+</html>

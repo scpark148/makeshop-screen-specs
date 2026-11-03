@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>[초안] 취소·반품 최초배송비 환불범위 설정 - 관리자 취소·반품 환불 처리</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #f1f3f5; color: #222; font-family: "Malgun Gothic", Arial, sans-serif; font-size: 13px; line-height: 1.48; }
+    .wrap { width: 1920px; margin: 24px auto; background: #fff; border: 1px solid #c8ced6; }
+    .doc-head { padding: 22px 28px 18px; border-top: 4px solid #2f7bd6; border-bottom: 1px solid #c8ced6; }
+    h1 { margin: 0 0 12px; font-size: 22px; font-weight: 700; }
+    .meta { display: grid; grid-template-columns: 120px 1fr 120px 1fr; border-top: 1px solid #aaa; border-left: 1px solid #aaa; }
+    .meta dt, .meta dd { margin: 0; padding: 7px 10px; border-right: 1px solid #aaa; border-bottom: 1px solid #aaa; }
+    .meta dt { background: #f3f6fa; font-weight: 700; }
+    .note { margin: 14px 28px 0; padding: 9px 11px; border: 1px solid #b9cce3; background: #f4f8fd; color: #3e5874; }
+    .doc-body { display: flex; align-items: stretch; gap: 18px; padding: 18px 28px 28px; }
+    .screen-panel { flex: 1 1 auto; min-width: 0; border: 1px solid #c8ced6; padding: 16px; }
+    .screen-label { margin-bottom: 12px; color: #315c91; font-weight: 700; }
+    .screen-inner { width: 100%; min-width: 0; min-height: 670px; overflow: hidden; border: 1px solid #c4ced8; background: #e7edf3; padding: 34px; position: relative; }
+    .back-office { position: absolute; inset: 0; padding: 24px; color: #98a4b1; }
+    .back-top { height: 34px; border-bottom: 1px solid #c7d0d9; font-weight: 700; }
+    .back-card { height: 106px; margin-top: 16px; border: 1px solid #d1d8df; background: #edf2f6; }
+    .refund-modal { position: relative; z-index: 1; width: 100%; margin: 0 auto; border: 1px solid #9aa9b8; background: #fff; box-shadow: 0 5px 14px rgba(40, 60, 80, .14); }
+    .modal-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #2f7bd6; color: #fff; font-weight: 700; }
+    .modal-head button { min-width: 0; padding: 0; border: 0; background: transparent; color: #fff; font-size: 18px; }
+    .modal-body { padding: 14px 16px 16px; }
+    .order-line { margin-bottom: 13px; padding: 8px 10px; border: 1px solid #d1dae3; background: #f5f8fb; color: #49627d; }
+    .section-title { margin: 14px 0 7px; padding-left: 8px; border-left: 3px solid #2f7bd6; font-weight: 700; }
+    .refund-table { margin-top: 8px; border-top: 1px solid #cbd4dd; border-left: 1px solid #cbd4dd; }
+    .refund-table th, .refund-table td { border-right: 1px solid #cbd4dd; border-bottom: 1px solid #cbd4dd; }
+    .refund-table th { width: 180px; background: #f4f4f4; color: #222; }
+    .refund-table .amount { width: 120px; text-align: right; color: #222; }
+    .refund-table .amount.auto { color: #1768bf; }
+    .refund-table .amount.minus { color: #e24232; }
+    .refund-table .description { color: #444; }
+    .refund-table .hint { color: #ed5b00; }
+    .refund-table .total-row th, .refund-table .total-row td { background: #eaf2ff; }
+    .refund-table .total-row .amount { color: #1768bf; font-weight: 700; }
+    .refund-table .actual-row th, .refund-table .actual-row td { background: #e7f0ff; font-weight: 700; }
+    .refund-table .actual-row .amount { color: #1768bf; }
+    .shipping-checkbox { margin: 0 7px 0 0; accent-color: #2878d7; vertical-align: -1px; }
+    .shipping-checkbox:disabled { opacity: .55; cursor: not-allowed; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 9px 10px; border-right: 1px solid #aaa; border-bottom: 1px solid #aaa; text-align: left; }
+    th:last-child, td:last-child { border-right: 0; }
+    tr:last-child td { border-bottom: 0; }
+    th { background: #f3f6f9; font-weight: 700; }
+    .demo { padding: 9px 10px; border: 1px solid #c8d7e7; background: #f4f8fd; color: #405a75; }
+    .demo label { margin-right: 20px; }
+    .demo-group { display: inline-block; margin-right: 20px; }
+    .refund-grid { display: grid; grid-template-columns: 180px 1fr; }
+    .refund-grid div { padding: 9px 12px; border-bottom: 1px solid #cbd4dd; }
+    .refund-grid div:nth-child(odd) { background: #f3f6f9; border-right: 1px solid #cbd4dd; font-weight: 700; }
+    .refund-grid .shipping-label, .refund-grid .shipping-value { background: #fff8e8; }
+    .refund-grid .shipping-label { border-right: 1px solid #cbd4dd; }
+    .refund-grid .total-label, .refund-grid .total-value { background: #edf5ff; color: #1e5fa8; font-weight: 700; }
+    .refund-grid .last { border-bottom: 0; }
+    .actions { margin-top: 18px; text-align: right; }
+    button { padding: 8px 20px; border: 1px solid #8fa0b2; background: #fff; color: #222; font: inherit; cursor: pointer; }
+    .primary { border-color: #1e65b8; background: #2f7bd6; color: #fff; }
+    .demo-result { min-height: 20px; margin-top: 9px; text-align: right; color: #555; }
+    .pin { position: absolute; z-index: 2; width: 25px; height: 25px; border: 1px solid #d93025; border-radius: 50%; background: #fff; color: #d93025; text-align: center; line-height: 23px; font-size: 12px; font-weight: 700; }
+    /* 각 설명 대상의 좌측 앞에 절대 위치로 배치 */
+    .modal-head, .section-title, .refund-table th, .actions, .refund-action-wrap { position: relative; }
+    .p1 { left: -34px; top: -1px; } .p2 { left: -31px; top: -1px; } .p3 { left: -33px; top: 4px; } .p4 { left: -31px; top: -1px; }
+    .refund-action-wrap { display: inline-block; }
+    .desc-panel { flex: 0 0 460px; align-self: flex-start; border: 1px solid #c8ced6; padding: 16px 18px; }
+    .desc-panel h2 { margin: 0 0 14px; padding-bottom: 9px; border-bottom: 2px solid #2f7bd6; font-size: 16px; }
+    .desc-list { list-style: none; margin: 0; padding: 0; }
+    .desc-list > li { display: block; padding: 13px 0; border-bottom: 1px solid #bbb; }
+    .num { display: inline-block; min-width: 27px; margin-bottom: 6px; padding: 2px 7px; border: 1px solid #d93025; color: #d93025; font-weight: 700; text-align: center; }
+    .desc-body strong { display: block; margin-bottom: 4px; }
+    .bullet, .field-list, .cond-list { margin: 6px 0 0 18px; padding: 0; }
+    .field-list li { margin-bottom: 5px; }
+    .field-list b { display: block; }
+    .cond-label { display: inline-block; margin-top: 7px; font-weight: 700; }
+    .xref { font-weight: 700; }
+    .qa { margin: 0 28px 28px; padding: 14px; border: 1px solid #c8ced6; background: #f8fafc; }
+    .qa h2 { margin: 0 0 9px; font-size: 15px; }
+    .qa ul { margin: 0; padding-left: 20px; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="doc-head">
+      <h1>[초안] 취소·반품 최초배송비 환불범위 설정 - 관리자 취소·반품 환불 처리</h1>
+      <dl class="meta">
+        <dt>화면 ID</dt><dd>확정 전</dd><dt>상태</dt><dd>개념 화면 초안</dd>
+        <dt>관련 이슈</dt><dd>MS-26037</dd><dt>화면 경로</dt><dd>[확인 필요] 실제 취소·반품 환불 처리 화면</dd>
+        <dt>기준 문서</dt><dd>사양정의서 v0.3</dd><dt>작성일</dt><dd>2026-11-02</dd>
+      </dl>
+    </header>
+    <p class="note"><strong>[확인 필요]</strong> 실제 주문·클레임 정보, 금액 항목명, 승인·확정 시점은 미확정입니다. 아래 선택은 부분/마지막 상품 처리 기준을 보여 주기 위한 정책 확인용 데모입니다.</p>
+    <section class="doc-body">
+      <section class="screen-panel">
+        <div class="screen-label">화면 미리보기 (데스크톱 1280px 이상 기준)</div>
+        <div class="screen-inner">
+          <div class="back-office"><div class="back-top">주문상세 &gt; 환불 관련 탭</div><div class="back-card"></div><div class="back-card"></div></div>
+          <section class="refund-modal" aria-label="환불상태 상세 정보 팝업">
+            <header class="modal-head"><span class="pin p1">1</span><span>환불상태 상세 정보</span><button type="button" aria-label="팝업 닫기">×</button></header>
+            <div class="modal-body">
+              <div class="order-line">[확인 필요] 주문번호 · 클레임 유형 · 처리 상태</div>
+              <div class="demo"><strong>정책 확인용 예시 전환</strong>　<span class="demo-group"><b>설정값</b>　<label><input type="radio" name="refundSetting" value="off" checked> OFF</label><label><input type="radio" name="refundSetting" value="on"> ON</label></span><span class="demo-group"><b>클레임</b>　<label><input type="radio" name="claimCase" value="partial" checked> 일부 상품</label><label><input type="radio" name="claimCase" value="final"> 마지막 상품</label></span>(아래 금액은 예시입니다.)</div>
+              <h3 class="section-title"><span class="pin p2">2</span>환불금액 정보</h3>
+              <table class="refund-table" aria-label="환불금액 정보"><tbody>
+                <tr><th>환불 예상액</th><td class="amount">158,000원</td><td class="description">취소상품과 교환상품의 <span class="hint">실결제금액 차액</span>입니다.</td></tr>
+                <tr><th><span class="pin p3">3</span>최초배송비 환불액</th><td class="amount auto"><label><input id="shippingRefundCheckbox" class="shipping-checkbox" type="checkbox" checked aria-label="총 환불액에서 최초배송비 차감"><span id="deliveryRefund">1,000원</span></label></td><td class="description">체크 시 총 환불액과 실 환불액에서 차감하는 주문 당시 최초배송비입니다.</td></tr>
+                <tr><th>반송비</th><td class="amount minus">0원</td><td class="description"><span class="hint">본 사양 범위 제외</span> — 반품배송비 정책 및 MS-20708에서 확인합니다.</td></tr>
+                <tr><th>재발송 배송비</th><td class="amount minus">0원</td><td class="description"><span class="hint">본 사양 범위 제외</span> — 기존 처리 기준을 유지합니다.</td></tr>
+                <tr><th>주문 시 사용한 적립금 환불</th><td class="amount minus">0원</td><td class="description">결제 시 사용한 적립금의 기존 환불 정책을 따릅니다.</td></tr>
+                <tr><th>주문 시 사용한 예치금 환불</th><td class="amount minus">0원</td><td class="description">결제 시 사용한 예치금의 기존 환불 정책을 따릅니다.</td></tr>
+                <tr class="total-row"><th>총 환불액</th><td id="totalRefund" class="amount">157,000원</td><td class="description">환불 예상액 − 선택한 최초배송비 차감액 + 기존 차감·환원 기준</td></tr>
+                <tr class="total-row"><th>적립금 환원액</th><td class="amount">0원</td><td class="description">기존 환불 흐름에 따라 환원되는 적립금입니다.</td></tr>
+                <tr class="total-row"><th>예치금 환원액</th><td class="amount">0원</td><td class="description">기존 환불 흐름에 따라 환원되는 예치금입니다.</td></tr>
+                <tr class="actual-row"><th>실 환불액</th><td id="actualRefund" class="amount">157,000원</td><td class="description">고객에게 실제로 환불되는 금액입니다.</td></tr>
+              </tbody></table>
+              <div class="actions"><span class="refund-action-wrap"><span class="pin p4">4</span><button type="button">취소</button> <button id="approveButton" class="primary" type="button">환불 처리</button></span></div><div id="demoResult" class="demo-result" aria-live="polite"></div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <aside class="desc-panel">
+        <h2>화면 정의</h2>
+        <ol class="desc-list">
+          <li><span class="num">1</span><div class="desc-body"><strong>환불 상태 상세 정보 팝업</strong><ul class="bullet"><li>라벨 : 주문 정보 / 클레임 정보</li></ul><ol class="field-list"><li><b>노출 정보</b>실제 주문 식별값과 클레임 상태는 기존 팝업을 확인해 확정한다.</li></ol></div></li>
+          <li><span class="num">2</span><div class="desc-body"><strong>환불금액 정보</strong><ul class="bullet"><li>라벨 : 환불 예상액 / 최초배송비 환불액 / 총 환불액</li></ul><ol class="field-list"><li><b>부분 취소·반품</b>최초배송비 1,000원은 표시하고, 설정 ON에서는 자동 차감한다.</li><li><b>마지막 상품 취소·반품</b>최초배송비 1,000원은 표시하고, 설정 ON에서는 차감하지 않는다.</li></ol><span class="xref">[사양정의서 3.2에서 확인]</span></div></li>
+          <li><span class="num">3</span><div class="desc-body"><strong>최초배송비 환불액 체크박스</strong><ul class="bullet"><li>라벨 : 차감 체크박스 / 최초배송비 환불액 / 총 환불액</li></ul><ol class="field-list"><li><b>금액 표시</b>최초배송비는 항상 주문 당시 실제 결제 금액(예시 1,000원)을 표시한다.</li><li><b>설정 OFF</b>기존 방식으로 체크박스를 선택 또는 해제할 수 있으며, 체크 시 총 환불액과 실 환불액에서 1,000원을 차감한다.</li><li><b>설정 ON + 부분 처리</b>체크박스를 선택·비활성화하여 최초배송비를 자동 차감한다.</li><li><b>설정 ON + 마지막 상품 처리</b>체크박스를 해제·비활성화하여 최초배송비를 차감하지 않는다.</li><li><b>재처리</b>이미 최초배송비를 환불한 경우의 체크 상태와 차감 기준은 확인이 필요하다.</li></ol><span class="cond-label">확정 조건 :</span><ol class="cond-list"><li>실제 금액 항목명과 산정·표시 시점은 구현 전 확인한다.</li></ol></div></li>
+          <li><span class="num">4</span><div class="desc-body"><strong>환불 처리</strong><ul class="bullet"><li>라벨 : 취소 / 환불 처리</li></ul><ol class="field-list"><li><b>환불 처리</b>체크박스에 반영된 최초배송비 차감 결과를 포함해 기존 환불 처리 흐름을 실행한다.</li><li><b>판정 시점</b>마지막 상품 판정 시점은 승인·확정 단계 제안이며 확정이 필요하다.</li></ol></div></li>
+        </ol>
+      </aside>
+    </section>
+    <section class="qa"><h2>QA 확인</h2><ul><li>설정 ON 및 부분 상품 처리 시 최초배송비 1,000원이 표시되고 체크 상태가 비활성화되는지 확인한다.</li><li>설정 ON 및 마지막 상품 처리 시 최초배송비 1,000원이 표시되고 체크 해제 상태가 비활성화되는지 확인한다.</li><li>체크 상태에 따라 총 환불액과 실 환불액에서 1,000원이 차감되는지 확인한다.</li><li>OFF일 때는 체크박스를 조작할 수 있는지 확인한다.</li></ul></section>
+  </main>
+  <script>
+    const deliveryRefund = document.getElementById('deliveryRefund');
+    const totalRefund = document.getElementById('totalRefund');
+    const actualRefund = document.getElementById('actualRefund');
+    const shippingRefundCheckbox = document.getElementById('shippingRefundCheckbox');
+    const selectedValue = (name) => document.querySelector(`input[name="${name}"]:checked`).value;
+    const updateRefundExample = () => {
+      const settingOn = selectedValue('refundSetting') === 'on';
+      const isFinal = selectedValue('claimCase') === 'final';
+      if (settingOn) {
+        shippingRefundCheckbox.disabled = true;
+        shippingRefundCheckbox.checked = !isFinal;
+      } else {
+        shippingRefundCheckbox.disabled = false;
+      }
+      const shippingDeduction = shippingRefundCheckbox.checked ? 1000 : 0;
+      const refundAmount = 158000 - shippingDeduction;
+      deliveryRefund.textContent = '1,000원';
+      totalRefund.textContent = `${refundAmount.toLocaleString('ko-KR')}원`;
+      actualRefund.textContent = `${refundAmount.toLocaleString('ko-KR')}원`;
+      document.getElementById('demoResult').textContent = '';
+    };
+    document.querySelectorAll('input[name="claimCase"], input[name="refundSetting"]').forEach((input) => input.addEventListener('change', updateRefundExample));
+    shippingRefundCheckbox.addEventListener('change', updateRefundExample);
+    document.getElementById('approveButton').addEventListener('click', () => {
+      document.getElementById('demoResult').textContent = '환불 처리 동작은 정책 확인용 데모입니다.';
+    });
+  </script>
+</body>
+</html>

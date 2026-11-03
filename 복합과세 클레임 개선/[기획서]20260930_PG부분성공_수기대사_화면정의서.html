@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>복합과세 클레임 개선 - PG 부분성공 수기처리·대사 관리</title>
+<style>
+  :root { --line:#dcdcdc; --blue:#2f7bd6; --font:"Malgun Gothic","맑은 고딕",Dotum,Arial,sans-serif; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:#f2f3f5; color:#222; font:13px/1.55 var(--font); }
+  .wrap { width:100%; padding:16px 20px 40px; }
+
+  .doc-title { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .doc-title h1 { margin:0; font-size:19px; }
+  .doc-title h1 .project-tag { color:#666; font-weight:400; }
+  .doc-title .badge { padding:2px 8px; border:1px solid var(--blue); border-radius:3px; color:var(--blue); font-size:11px; font-weight:700; }
+
+  .doc-meta { width:100%; border-collapse:collapse; background:#fff; margin-bottom:16px; table-layout:fixed; }
+  .doc-meta th, .doc-meta td { border:1px solid var(--line); padding:9px 12px; font-size:12px; }
+  .doc-meta th { width:11%; background:#fafafa; text-align:left; color:#555; font-weight:700; }
+
+  .doc-body { display:flex; gap:16px; align-items:stretch; }
+  .screen-panel { flex:1 1 auto; min-width:0; padding:18px; border:1px solid var(--line); background:#fff; }
+  .screen-panel .panel-label { margin:0 0 10px; font-size:11px; color:#888; }
+  .screen-inner { max-width:1040px; margin:0 auto; }
+
+  .desc-panel { flex:0 0 440px; padding:16px 18px; border:1px solid var(--line); background:#fff; position:sticky; top:16px; align-self:flex-start; }
+  .desc-panel h2 { margin:0 0 10px; font-size:14px; padding-bottom:8px; border-bottom:2px solid #333; }
+  .desc-list { margin:0; padding:0; list-style:none; }
+  .desc-list li { display:block; padding:9px 0; border-bottom:1px dashed var(--line); }
+  .desc-list li:last-child { border-bottom:0; }
+  .sub-list { margin:7px 0 0; padding:7px 0 0 0; list-style:none; border-top:1px dotted var(--line); }
+  .sub-list li { display:block; padding:0 0 7px; }
+  .sub-list li:last-child { padding-bottom:0; }
+  .sub-num { display:inline-block; margin-bottom:3px; padding:1px 6px; border-radius:10px; background:#eee; color:#555; font-size:10px; font-weight:700; white-space:nowrap; }
+  .num { display:inline-grid; place-items:center; width:17px; height:17px; margin-bottom:4px; border-radius:50%; background:#e0432b; color:#fff; font-size:10px; font-weight:700; }
+  .desc-body strong, .sub-body strong { display:block; margin-bottom:4px; font-size:13px; }
+  .sub-body strong { font-size:12.5px; }
+  .desc-body p, .sub-body p { margin:3px 0 0; color:#555; font-size:12px; line-height:1.48; }
+  .sub-body p { font-size:11.5px; color:#666; }
+  .sub-body .howto { display:block; margin-top:3px; color:#888; font-size:11px; }
+  .desc-body .ref { display:inline-block; margin-top:5px; padding:1px 6px; border:1px solid #cfd5dd; border-radius:2px; background:#f7f9fc; color:#3d4b5c; font-size:10.5px; }
+  .desc-body ul.bullet, .sub-body ul.bullet { margin:3px 0 0; padding:0; list-style:none; }
+  .desc-body ul.bullet li, .sub-body ul.bullet li { position:relative; padding-left:13px; margin-bottom:2px; font-size:12px; line-height:1.45; }
+  .sub-body ul.bullet li { font-size:11.5px; color:#666; }
+  .desc-body ul.bullet li::before, .sub-body ul.bullet li::before { content:"•"; position:absolute; left:0; }
+  .desc-body ol.field-list, .sub-body ol.field-list { margin:3px 0 0; padding-left:18px; }
+  .desc-body ol.field-list li, .sub-body ol.field-list li { margin-bottom:5px; font-size:12px; line-height:1.45; }
+  .sub-body ol.field-list li { font-size:11.5px; color:#666; }
+  .desc-body ol.field-list li b, .sub-body ol.field-list li b { display:block; margin-bottom:1px; }
+  .desc-body .cond-label, .sub-body .cond-label { display:block; margin-top:5px; font-weight:700; color:#c0392b; }
+  .desc-body ol.cond-list, .sub-body ol.cond-list { margin:2px 0 0 0; padding-left:18px; color:#c0392b; }
+  .desc-body ol.cond-list li, .sub-body ol.cond-list li { margin-bottom:2px; font-size:12px; line-height:1.45; }
+  .desc-body .xref, .sub-body .xref { color:#555; }
+
+  .qa-panel { margin-top:16px; padding:14px 16px; border:1px solid var(--line); background:#fff; }
+  .qa-panel h2 { margin:0 0 10px; font-size:14px; padding-bottom:8px; border-bottom:2px solid #333; }
+  .qa-panel table { width:100%; border-collapse:collapse; }
+  .qa-panel th, .qa-panel td { border:1px solid var(--line); padding:8px 10px; font-size:12px; text-align:left; }
+  .qa-panel th { width:110px; background:#fafafa; }
+
+  .pin-anchor { position:relative; }
+  .pin { position:absolute; top:-12px; left:-12px; z-index:5; display:inline-grid; place-items:center; width:24px; height:24px; border-radius:50%; background:#e0432b; color:#fff; font-size:12px; font-weight:700; box-shadow:0 1px 4px rgba(0,0,0,.35); border:2px solid #fff; }
+
+  /* ── 아래부터 목업 원본 스타일 (screen-inner 내부에만 적용) ── */
+  .screen-inner .title-bar { display: flex; align-items: center; justify-content: space-between; height: 33px; padding: 0 10px; margin-bottom: 12px; border: 1px solid #aaa; background: #eee; }
+  .screen-inner .title-left { display: flex; align-items: center; gap: 5px; }
+  .screen-inner .title-icon { display: inline-block; width: 14px; height: 14px; border-radius: 2px; background: #666; }
+  .screen-inner h1 { margin: 0; font-size: 18px; }
+  .screen-inner h2 { margin: 0 0 8px; font-size: 15px; }
+  .screen-inner .order-no { min-width: 300px; height: 24px; line-height: 22px; border: 1px solid #c8c8c8; background: #fff; text-align: center; color: #555; }
+  .screen-inner .status-banner { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 18px; padding: 10px 12px; border: 1px solid #b9a24a; background: #fffdf0; }
+  .screen-inner .status-banner .dot { flex: 0 0 auto; width: 16px; height: 16px; margin-top: 2px; border-radius: 50%; background: #a9922f; color: #fff; display: grid; place-items: center; font-size: 11px; font-weight: 700; }
+  .screen-inner .status-banner strong { display: block; margin-bottom: 2px; }
+  .screen-inner .status-banner p { margin: 2px 0; color: #5c531f; }
+  .screen-inner section { margin-bottom: 20px; }
+  .screen-inner table { width: 100%; border-collapse: collapse; }
+  .screen-inner th, .screen-inner td { padding: 7px 10px; border: 1px solid #cfcfcf; vertical-align: middle; }
+  .screen-inner .info-table th { width: 180px; background: #f7f7f7; text-align: left; }
+  .screen-inner .complete-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 10px; background: #e8f5e9; color: #2e7d32; font-weight: 700; font-size: 11px; }
+  .screen-inner .incomplete-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 10px; background: #fdecea; color: #c62828; font-weight: 700; font-size: 11px; }
+  .screen-inner .manual-form th { width: 180px; background: #f7f7f7; text-align: left; }
+  .screen-inner .manual-form input[type="text"], .screen-inner .manual-form textarea { width: 260px; border: 1px solid #c6c6c6; padding: 4px 6px; }
+  .screen-inner .manual-form textarea { width: 420px; height: 50px; }
+  .screen-inner .manual-form .disabled-input { display: inline-block; width: 100px; padding: 4px 8px; background: #eee; border: 1px solid #c6c6c6; text-align: right; }
+  .screen-inner .recon-table th { width: 200px; background: #f7f7f7; text-align: left; }
+  .screen-inner .recon-table td { text-align: right; }
+  .screen-inner .recon-table .match td { color: #2e7d32; font-weight: 700; }
+  .screen-inner .recon-table .mismatch td { color: #c62828; font-weight: 700; }
+  .screen-inner .recon-summary { margin-top: 10px; padding: 10px 12px; border: 2px solid #2e7d32; background: #f4faf1; }
+  .screen-inner .recon-summary.mismatch { border-color: #c62828; background: #fdf3f3; }
+  .screen-inner .recon-summary strong { display: block; margin-bottom: 4px; }
+  .screen-inner .recon-summary.ok strong { color: #2e7d32; }
+  .screen-inner .recon-summary.mismatch strong { color: #c62828; }
+  .screen-inner .btn-line { margin-top: 16px; text-align: right; }
+  .screen-inner .btn { display: inline-block; height: 30px; line-height: 28px; margin-left: 6px; padding: 0 18px; border: 1px solid #999; background: #fff; font-weight: 700; font-size: 12px; }
+  .screen-inner .btn.primary { background: #555; border-color: #555; color: #fff; }
+  .screen-inner .btn.primary[disabled] { background: #ccc; border-color: #ccc; color: #888; cursor: not-allowed; }
+  .screen-inner .small-muted { color: #666; font-size: 11px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="doc-title"><h1><span class="project-tag">복합과세 클레임 개선</span> - PG 부분성공 수기처리·대사 관리</h1><span class="badge">화면정의서 v1.0</span></div>
+
+  <table class="doc-meta">
+    <tr><th>화면 ID</th><td>SCR-CLM-005</td><th>화면명</th><td>PG 부분성공 수기처리·대사 관리</td></tr>
+    <tr><th>연결 경로</th><td colspan="3">클레임 관리 &gt; 처리 상태: 확인 대상(PG 부분성공) &gt; 상세</td></tr>
+    <tr><th>관련 정책</th><td>정책서 5장, 6.2절, 6.3절</td><th>관련 Jira</th><td>MS-9897</td></tr>
+    <tr><th>작성일 / 버전</th><td>2026-09-30 / v1.0</td><th>상태</th><td>기획 검토 초안 · 세부 처리 방식은 PG사 확인 전까지 확정 정책 아님</td></tr>
+  </table>
+
+  <div class="doc-body">
+    <div class="screen-panel">
+      <p class="panel-label">화면 미리보기 (실제 동작 목업 · "수기 반영 처리" 버튼 클릭 시 대사 결과가 갱신됩니다)</p>
+      <div class="screen-inner">
+        <main class="page">
+          <header class="title-bar"><div class="title-left"><span class="title-icon" aria-hidden="true"></span><h1>PG 부분성공 수기처리·대사 관리</h1></div><div class="order-no">클레임번호 : <strong>CLM-20260727-0032</strong></div></header>
+
+          <div class="pin-anchor">
+            <span class="pin">1</span>
+            <div class="status-banner" role="note">
+              <span class="dot">!</span>
+              <div>
+                <strong>PG 처리만 완료된 부분 성공</strong>
+                <p>카드(PG) 취소는 완료되었으나 내부 적립금·예치금 복원이 아직 반영되지 않았습니다. 내부 미완료 내역을 수기로 처리한 뒤 PG 취소 데이터와 직접 대조해야 완료 처리됩니다. 성공한 카드 취소는 다시 요청하지 않습니다.</p>
+              </div>
+            </div>
+          </div>
+
+          <section class="pin-anchor">
+            <span class="pin">2</span>
+            <h2>PG 취소 결과</h2>
+            <table class="info-table" aria-label="PG 취소 결과">
+              <tr><th>처리 상태</th><td><span class="complete-badge">완료</span></td></tr>
+              <tr><th>승인번호 / 취소 거래ID</th><td>20260727-889231 / TXN-4482910</td></tr>
+              <tr><th>PG 취소 금액</th><td>38,000원 (과세 34,545원 + 부가세 3,455원)</td></tr>
+              <tr><th>취소 처리 일시</th><td>2026-07-27 14:12:03</td></tr>
+            </table>
+          </section>
+
+          <section class="pin-anchor">
+            <span class="pin">3</span>
+            <h2>내부 처리 현황</h2>
+            <table class="info-table" aria-label="내부 처리 현황">
+              <tr><th>사용 적립금 복원</th><td><span class="incomplete-badge">미완료</span> 1,000원 (반영 필요)</td></tr>
+              <tr><th>현금성 예치금 복원</th><td><span class="complete-badge">완료</span> 2,000원 (2026-07-27 14:15:10)</td></tr>
+            </table>
+          </section>
+
+          <section class="pin-anchor">
+            <span class="pin">4</span>
+            <h2>내부 미완료 건 수기 반영</h2>
+            <table class="manual-form">
+              <tr><th>대상 항목</th><td>사용 적립금 복원</td></tr>
+              <tr><th>반영 금액</th><td><span class="disabled-input">1,000</span>원 <span class="small-muted">※ 스냅샷 기준 잔여 환불 가능액을 초과할 수 없습니다.</span></td></tr>
+              <tr><th>처리자</th><td><input type="text" value="관리자 홍길동" readonly></td></tr>
+              <tr><th>처리 메모</th><td><textarea placeholder="수기 처리 사유·근거를 입력하세요"></textarea></td></tr>
+            </table>
+            <div class="btn-line"><span class="btn primary" id="applyBtn">수기 반영 처리</span></div>
+          </section>
+
+          <section class="pin-anchor">
+            <span class="pin">5</span>
+            <h2>PG 취소 데이터 직접 대조</h2>
+            <table class="recon-table" aria-label="대사 결과">
+              <tr><th>PG 취소 금액 합계</th><td>38,000원</td></tr>
+              <tr><th>내부 복원 합계 (수기 반영 후)</th><td id="internalTotal">3,000원</td></tr>
+              <tr><th>상품 반환 내역 합계 (스냅샷 기준)</th><td>41,000원</td></tr>
+              <tr class="match" id="matchRow"><th>대사 결과</th><td id="matchResult">일치</td></tr>
+            </table>
+            <div class="recon-summary ok" id="reconSummary">
+              <strong id="reconTitle">대사 완료 — 클레임 완료 처리 가능</strong>
+              <p id="reconDesc">PG 취소 금액과 내부 복원 합계(수기 반영分 포함)가 상품 반환 내역 합계와 일치합니다. 완료 처리 버튼이 활성화됩니다.</p>
+            </div>
+          </section>
+
+          <div class="pin-anchor">
+            <span class="pin">6</span>
+            <div class="btn-line"><span class="btn">확인 대상으로 유지</span><span class="btn primary" id="completeBtn">클레임 완료 처리</span></div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <aside class="desc-panel">
+      <h2>화면 설명</h2>
+      <ol class="desc-list">
+        <li><span class="num">1</span><div class="desc-body"><strong>부분성공 상태 배너</strong>
+          <span class="cond-label">노출 조건 :</span>
+          <ol class="cond-list">
+            <li>PG 카드 취소는 성공했으나 내부(적립금·예치금) 처리가 미완료인 경우</li>
+          </ol>
+          <p style="margin-top:4px">성공한 카드 취소는 중복 실행하지 않는다는 원칙을 함께 안내합니다.</p>
+          <span class="ref">정책서 6.2절</span>
+        </div></li>
+
+        <li><span class="num">2</span><div class="desc-body"><strong>PG 취소 결과</strong>
+          <ol class="field-list">
+            <li><b>승인번호 / 취소 거래ID</b>PG사 응답값을 그대로 표시 (수정 불가)</li>
+            <li><b>PG 취소 금액</b>실제 카드 승인금액 중 PG에 취소 요청한 금액</li>
+          </ol>
+          <span class="ref">정책서 5장</span>
+        </div></li>
+
+        <li><span class="num">3</span><div class="desc-body"><strong>내부 처리 현황</strong>
+          <p>적립금·적립성 예치금·현금성 예치금 복원 항목을 각각 완료/미완료 배지로 표시합니다. 미완료 항목만 아래 4번 영역에서 수기 반영 대상이 됩니다.</p>
+          <span class="ref">정책서 5장</span>
+        </div></li>
+
+        <li><span class="num">4</span><div class="desc-body"><strong>내부 미완료 건 수기 반영</strong>
+          <ul class="bullet"><li>미완료 항목의 처리자·메모를 입력하고 "수기 반영 처리" 버튼으로 확정</li></ul>
+          <span class="cond-label">금액 제한 조건 :</span>
+          <ol class="cond-list">
+            <li>반영 금액은 스냅샷 기준 잔여 환불 가능액을 초과할 수 없음</li>
+          </ol>
+          <ul class="sub-list">
+            <li><span class="sub-num">4-1</span><div class="sub-body">
+              <strong>수기 반영 처리 (버튼)</strong>
+              <ul class="bullet"><li>클릭 시 내부 복원 합계가 갱신되고 아래 대사 결과가 재계산됨</li></ul>
+              <span class="howto">사용법 : 메모 입력 후 클릭 → 버튼이 "수기 반영 완료"로 바뀌며 비활성화</span>
+            </div></li>
+          </ul>
+          <span class="ref">정책서 6.2절</span>
+        </div></li>
+
+        <li><span class="num">5</span><div class="desc-body"><strong>PG 취소 데이터 직접 대조</strong>
+          <p>PG 취소 금액 합계와 내부 복원 합계(수기 반영分 포함)를 상품 반환 내역 합계(스냅샷 기준)와 비교합니다.</p>
+          <span class="cond-label">일치/불일치 표시 조건 :</span>
+          <ol class="cond-list">
+            <li>세 금액이 모두 같으면 "일치"(녹색)</li>
+            <li>하나라도 다르면 "불일치"(빨간색)로 표시하고 완료 처리를 차단</li>
+          </ol>
+          <span class="ref">정책서 5장 · 6.2절</span>
+        </div></li>
+
+        <li><span class="num">6</span><div class="desc-body"><strong>확인 대상 유지 / 클레임 완료 처리</strong>
+          <span class="cond-label">완료 처리 버튼 활성화 조건 :</span>
+          <ol class="cond-list">
+            <li>대사 결과가 "일치"인 경우에만 활성화</li>
+            <li>불일치 상태에서는 "확인 대상으로 유지"만 가능</li>
+          </ol>
+          <p style="margin-top:4px">세부 수기 처리 담당·기한, PG 응답·조회 기준, 대사 필드는 PG사와 운영·개발·정산이 확인한 뒤 별도 절차로 확정합니다. <span class="xref">[6.3절 후속 검토]</span></p>
+        </div></li>
+      </ol>
+    </aside>
+  </div>
+
+  <div class="qa-panel">
+    <h2>확인 필요 사항</h2>
+    <table>
+      <tr><th>Q-CLM-003</th><td>PG 부분 성공 시 세부 처리 방식·응답 필드·기록 위치·완료 권한·처리 기한 (담당: PG·개발·운영 / 후속 확인)</td></tr>
+      <tr><th>O-04</th><td>카드 PG의 세금 구분별 승인·부분취소 처리 범위 (담당: 기획·개발·PG·정산)</td></tr>
+      <tr><th>O-05</th><td>환불 단계에서 관리자가 결정한 수단별 복원 여부·금액이 기존 적립금·예치금 잔액·정산 자료와 일치하는지 (담당: 정산·개발)</td></tr>
+      <tr><th>Q-15</th><td>PG 취소 성공 후 내부 처리 실패 — QA 기준 (11장): 전체 완료로 처리하거나 확인된 PG 취소를 중복 실행하지 않음</td></tr>
+    </table>
+  </div>
+</div>
+<script>
+  const applyBtn = document.getElementById('applyBtn');
+  const internalTotal = document.getElementById('internalTotal');
+  const matchResult = document.getElementById('matchResult');
+  const matchRow = document.getElementById('matchRow');
+  const reconSummary = document.getElementById('reconSummary');
+  const reconTitle = document.getElementById('reconTitle');
+  const reconDesc = document.getElementById('reconDesc');
+  const completeBtn = document.getElementById('completeBtn');
+  let applied = false;
+
+  completeBtn.setAttribute('disabled', 'disabled');
+
+  applyBtn.addEventListener('click', () => {
+    if (applied) return;
+    applied = true;
+    internalTotal.textContent = '3,000원';
+    matchRow.className = 'match';
+    matchResult.textContent = '일치';
+    reconSummary.className = 'recon-summary ok';
+    reconTitle.textContent = '대사 완료 — 클레임 완료 처리 가능';
+    reconDesc.textContent = 'PG 취소 금액과 내부 복원 합계(수기 반영分 포함)가 상품 반환 내역 합계와 일치합니다. 완료 처리 버튼이 활성화됩니다.';
+    completeBtn.removeAttribute('disabled');
+    applyBtn.textContent = '수기 반영 완료';
+    applyBtn.setAttribute('disabled', 'disabled');
+  });
+</script>
+</body>
+</html>

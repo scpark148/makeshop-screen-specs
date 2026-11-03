@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="980" viewBox="0 0 1440 980" role="img" aria-labelledby="title desc">
+  <title id="title">[초안] 배송비 과세 처리 설정</title>
+<desc id="desc">기존 정책과 동일하게 배송비를 전액 과세로 처리하는 화면.</desc>
+  <style>
+    text { font-family: "Malgun Gothic", "맑은 고딕", Dotum, Arial, sans-serif; fill: #222; }
+    .small { font-size: 12px; }
+    .body { font-size: 14px; }
+    .label { font-size: 15px; font-weight: 700; }
+    .muted { fill: #666; }
+    .line { stroke: #d8dce3; stroke-width: 1; }
+    .accent { fill: #2678f3; }
+  </style>
+
+  <rect width="1440" height="980" fill="#fff" />
+  <rect width="1440" height="40" fill="#2678f3" />
+  <text x="18" y="27" fill="#fff" font-size="20" font-weight="700">make#</text>
+  <rect x="111" y="8" width="72" height="24" rx="3" fill="#1265df" />
+  <text x="123" y="25" fill="#fff" class="small" font-weight="700">사용버전 ▾</text>
+
+  <rect y="40" width="1440" height="48" fill="#fff" />
+  <line x1="0" y1="87.5" x2="1440" y2="87.5" class="line" />
+  <g font-size="15" font-weight="700">
+    <text x="18" y="70">설정</text><text x="94" y="70">상품</text>
+    <text x="162" y="70" class="accent">주문</text><text x="232" y="70">회원</text>
+    <text x="306" y="70">게시판</text><text x="391" y="70">디자인</text>
+    <text x="477" y="70">프로모션</text><text x="579" y="70">부가서비스</text>
+    <text x="698" y="70">통계</text><text x="758" y="70">마켓관리</text>
+  </g>
+  <rect y="88" width="1440" height="38" fill="#fff" />
+  <line x1="0" y1="125.5" x2="1440" y2="125.5" class="line" />
+  <text x="14" y="112" class="small">등록된 스마트 폴더가 없습니다. 메뉴 우측의 ☆를 클릭하여 자주 사용하는 메뉴를 등록해주세요.</text>
+  <rect x="465" y="96" width="58" height="23" rx="3" fill="#f4f6f9" />
+  <text x="477" y="112" class="small">★ 설정</text>
+
+  <rect x="0" y="126" width="216" height="854" fill="#fff" />
+  <line x1="215.5" y1="126" x2="215.5" y2="980" class="line" />
+  <text x="82" y="171" font-size="25" font-weight="700">주문</text>
+  <rect x="75" y="183" width="66" height="24" rx="12" fill="#f0f6ff" />
+  <text x="91" y="199" class="small accent">매뉴얼</text>
+  <line x1="0" y1="220" x2="215" y2="220" class="line" />
+
+  <g class="body">
+    <text x="14" y="256">주문 관리</text><text x="194" y="256" class="muted">⌄</text>
+    <line x1="0" y1="273" x2="215" y2="273" class="line" />
+    <text x="14" y="308">취소/환불/교환/반품</text><text x="194" y="308" class="muted">⌄</text>
+    <line x1="0" y1="325" x2="215" y2="325" class="line" />
+    <text x="14" y="360">배송 설정</text><text x="194" y="360" class="muted">⌃</text>
+  </g>
+  <rect x="6" y="376" width="204" height="34" rx="3" fill="#e8f1ff" />
+  <rect x="6" y="376" width="3" height="34" fill="#2678f3" />
+  <text x="18" y="398" class="body accent" font-weight="700">· 배송비 과세 처리</text>
+  <text x="18" y="436" class="body">· 배송비 설정</text>
+  <text x="18" y="468" class="body">· 해외 배송</text>
+  <line x1="0" y1="492" x2="215" y2="492" class="line" />
+  <text x="14" y="527" class="body">부가 기능</text><text x="194" y="527" class="muted">⌄</text>
+  <line x1="0" y1="544" x2="215" y2="544" class="line" />
+  <text x="14" y="579" class="body">현금영수증</text><text x="194" y="579" class="muted">⌄</text>
+  <line x1="0" y1="596" x2="215" y2="596" class="line" />
+  <text x="14" y="631" class="body">세금계산서</text><text x="194" y="631" class="muted">⌄</text>
+
+  <rect x="216" y="126" width="1224" height="854" fill="#fff" />
+  <text x="258" y="180" font-size="25" font-weight="700">[초안] 배송비 과세 처리 설정</text>
+  <text x="1010" y="177" class="small muted">주문 &gt; 배송 설정 &gt; 배송비 과세 처리</text>
+  <line x1="258" y1="204" x2="1396" y2="204" class="line" />
+
+  <text x="258" y="249" font-size="18" font-weight="700">배송비 과세 처리 방식</text>
+  <rect x="1273" y="226" width="123" height="28" rx="3" fill="#f0f6ff" stroke="#c7dcff" />
+  <text x="1291" y="245" class="small accent" font-weight="700">신규 설정 항목</text>
+
+  <rect x="258" y="302" width="1138" height="104" fill="#fff" stroke="#cfd5dd" />
+  <circle cx="287" cy="341" r="9" fill="#fff" stroke="#777" stroke-width="1.5" />
+  <text x="314" y="346" class="label">배송비 전체 과세</text>
+<text x="314" y="376" class="body muted">배송비는 기존 정책과 동일하게 전액 과세로 처리합니다.</text>
+
+  <rect x="258" y="419" width="1138" height="151" fill="#f8fbff" stroke="#2678f3" stroke-width="2" />
+  <circle cx="287" cy="459" r="9" fill="#fff" stroke="#2678f3" stroke-width="2" />
+  <circle cx="287" cy="459" r="4.5" fill="#2678f3" />
+<text x="314" y="464" class="label">비율 배분 잔여금액은 마지막 품목에 귀속</text>
+  <rect x="1164" y="439" width="100" height="22" rx="3" fill="#e9f2ff" />
+  <text x="1181" y="454" class="small accent" font-weight="700">선택 예시</text>
+  <text x="314" y="516" class="body muted">과세·면세·영세 상품이 섞인 경우 각 유형별 금액을 구분합니다.</text>
+  <text x="314" y="542" class="small muted">세부 기준금액과 반올림·절사 방식은 정책 확정 후 적용합니다.</text>
+
+  <rect x="258" y="592" width="1138" height="166" fill="#f7f9fc" stroke="#d8dce3" />
+  <rect x="258" y="592" width="4" height="166" fill="#2678f3" />
+  <text x="282" y="623" class="label">적용 범위와 시점</text>
+  <text x="282" y="656" class="body">적용 항목</text>
+<text x="410" y="656" class="body">최초배송비 전액 과세</text>
+  <line x1="282" y1="671" x2="1372" y2="671" class="line" />
+  <text x="282" y="704" class="body">설정 변경</text>
+  <text x="410" y="704" class="body">변경 후 완료되는 주문부터 적용하며, 기존 주문은 주문 당시 설정을 유지합니다.</text>
+
+  <line x1="258" y1="795" x2="1396" y2="795" class="line" />
+  <rect x="1159" y="817" width="92" height="38" rx="3" fill="#fff" stroke="#9da5b1" />
+  <text x="1185" y="841" class="body">취소</text>
+  <rect x="1265" y="817" width="131" height="38" rx="3" fill="#2678f3" />
+  <text x="1298" y="841" fill="#fff" class="body" font-weight="700">설정 저장</text>
+
+  <rect x="258" y="879" width="1138" height="50" rx="3" fill="#fffdf3" stroke="#e5d99b" />
+  <text x="278" y="900" class="small" fill="#625a31">참고 레퍼런스: WF-003 배송 설정, DOC-014 배송비 산정 기준, DESIGN-005 설정 화면.</text>
+  <text x="278" y="919" class="small muted">선택된 과세 방식은 화면 구성을 위한 예시이며 고객사 기본값을 의미하지 않습니다.</text>
+</svg>
