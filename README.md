@@ -42,6 +42,10 @@ Makeshop 회사업무의 화면정의서만 공유하는 공개 저장소입니�
 - [\\[기획서\\]20261103_관리자취소반품환불처리](https://scpark148.github.io/makeshop-screen-specs/%EC%B7%A8%EC%86%8C%EB%B0%98%ED%92%88%20%EC%B5%9C%EC%B4%88%EB%B0%B0%EC%86%A1%EB%B9%84%20%ED%99%98%EB%B6%88%EB%B2%94%EC%9C%84%20%EC%84%A4%EC%A0%95/%5B%EA%B8%B0%ED%9A%8D%EC%84%9C%5D20261103_%EA%B4%80%EB%A6%AC%EC%9E%90%EC%B7%A8%EC%86%8C%EB%B0%98%ED%92%88%ED%99%98%EB%B6%88%EC%B2%98%EB%A6%AC_%ED%99%94%EB%A9%B4%EC%A0%95%EC%9D%98%EC%84%9C.html)
 - [\\[기획서\\]20261103_상점배송비환불범위설정](https://scpark148.github.io/makeshop-screen-specs/%EC%B7%A8%EC%86%8C%EB%B0%98%ED%92%88%20%EC%B5%9C%EC%B4%88%EB%B0%B0%EC%86%A1%EB%B9%84%20%ED%99%98%EB%B6%88%EB%B2%94%EC%9C%84%20%EC%84%A4%EC%A0%95/%5B%EA%B8%B0%ED%9A%8D%EC%84%9C%5D20261103_%EC%83%81%EC%A0%90%EB%B0%B0%EC%86%A1%EB%B9%84%ED%99%98%EB%B6%88%EB%B2%94%EC%9C%84%EC%84%A4%EC%A0%95_%ED%99%94%EB%A9%B4%EC%A0%95%EC%9D%98%EC%84%9C.html)
 
+### 통합간편결제 토스페이먼츠 연동
+
+- [\\[기획서\\]20261110_관리자_통합간편결제설정](https://scpark148.github.io/makeshop-screen-specs/%ED%86%B5%ED%95%A9%EA%B0%84%ED%8E%B8%EA%B2%B0%EC%A0%9C%20%ED%86%A0%EC%8A%A4%ED%8E%98%EC%9D%B4%EB%A8%BC%EC%B8%A0%20%EC%97%B0%EB%8F%99/%5B%EA%B8%B0%ED%9A%8D%EC%84%9C%5D20261110_%EA%B4%80%EB%A6%AC%EC%9E%90_%ED%86%B5%ED%95%A9%EA%B0%84%ED%8E%B8%EA%B2%B0%EC%A0%9C%EC%84%A4%EC%A0%95_%ED%99%94%EB%A9%B4%EC%A0%95%EC%9D%98%EC%84%9C.html)
+
 공유 주소 형식은 아래와 같습니다.
 
 `https://scpark148.github.io/makeshop-screen-specs/<업무폴더명>/<화면정의서 파일명>`
